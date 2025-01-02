@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dự Toán Việt - Phần Mềm Dự Toán Xây Dựng</title>
-    <link rel="stylesheet" href="asset/css/style.css">
+    <link rel="stylesheet" href="/asset/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -41,14 +41,14 @@
         </form>
 
         <div class="additional-options">
-            <a href="#" class="forgot-password">Quên mật khẩu?</a>
+            <a href="/forgot-password.php" class="forgot-password">Quên mật khẩu?</a>
             <span class="separator">|</span>
-            <a href="register.php" class="register-link">Đăng ký tài khoản mới</a>
+            <a href="/register.php" class="register-link">Đăng ký tài khoản mới</a>
         </div>
 
         <p id="error-message" class="error-message" style="display: none;"></p>
     </div>
 
-    <script src="asset/js/main.js"></script>
+    <script src="/asset/js/main.js"></script>
 </body>
 </html> 

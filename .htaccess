@@ -7,11 +7,35 @@ DirectoryIndex index.php
 
 # Enable rewrite engine
 RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
 
-# Secure headers
-Header set X-Content-Type-Options "nosniff"
+# Chuyển hướng www đến non-www
+RewriteCond %{HTTP_HOST} ^www\.dutoanviet\.com [NC]
+RewriteRule ^(.*)$ https://dutoanviet.com/$1 [L,R=301]
+
+# Đảm bảo sử dụng HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Xử lý các request đến API
+RewriteRule ^API/(.*)$ /API/$1 [L]
+
+# Xử lý các request đến asset
+RewriteRule ^asset/(.*)$ /asset/$1 [L]
+
+# Chuyển hướng tất cả request còn lại về index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# PHP Settings
+php_value memory_limit 256M
+php_value post_max_size 20M
+php_value upload_max_filesize 20M
+php_value max_execution_time 300
+php_value max_input_time 300
+
+# Security Headers
+Header set X-Frame-Options "SAMEORIGIN"
 Header set X-XSS-Protection "1; mode=block"
-Header set X-Frame-Options "SAMEORIGIN" 
+Header set X-Content-Type-Options "nosniff"
+Header set Strict-Transport-Security "max-age=31536000; includeSubDomains" 

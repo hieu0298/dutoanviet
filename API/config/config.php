@@ -1,7 +1,13 @@
 <?php
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_secure', 1); // nếu có HTTPS
+// Base URL configuration
+define('BASE_URL', 'https://dutoanviet.com');
+define('API_PATH', '/API');
+define('ASSET_PATH', '/asset');
+
+// Full paths
+define('SITE_URL', BASE_URL);
+define('API_URL', BASE_URL . API_PATH);
+define('ASSET_URL', BASE_URL . ASSET_PATH);
 
 // Database configuration
 define('DB_HOST', '103.77.162.14');
@@ -9,13 +15,15 @@ define('DB_NAME', 'damod148_dutoanviet');
 define('DB_USER', 'damod148_admindutoanviet');
 define('DB_PASS', '{bp83G~*r9^[');
 
+// Session configuration
+session_start();
+ini_set('session.cookie_httponly', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_secure', 1); // Khi có HTTPS
+
 // JWT configuration
 define('JWT_SECRET', 'your-secret-key-here');
 define('JWT_EXPIRE', 86400); // 24 hours
-
-// Application configuration
-define('SITE_URL', 'http://dutoanviet.com');
-define('API_URL', 'http://dutoanviet.com/API');
 
 // CORS configuration
 header('Access-Control-Allow-Origin: *');

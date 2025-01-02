@@ -1,4 +1,7 @@
-const API_URL = 'https://dutoanviet.com/API';
+// Lấy base URL động
+const BASE_URL = window.location.origin;
+const API_URL = `${BASE_URL}/API`;
+
 async function registerUser(userData) {
     try {
         const response = await fetch(`${API_URL}/auth/register.php`, {
@@ -82,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         localStorage.setItem('user', JSON.stringify(response.data.user));
                         
                         // Chuyển hướng đến trang dashboard
-                        window.location.href = './Page/dashboard.html';
+                        window.location.href = '/Page/dashboard.html';
                     } else {
                         if (errorMessage) {
                             errorMessage.style.display = 'block';
@@ -194,5 +197,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function isValidPhone(phone) {
         return /^[0-9]{10}$/.test(phone);
+    }
+
+    // Cập nhật link đăng ký
+    const registerLink = document.querySelector('.register-link');
+    if (registerLink) {
+        registerLink.href = '/register.php';
     }
 });
