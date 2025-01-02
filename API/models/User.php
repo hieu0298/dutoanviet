@@ -25,17 +25,30 @@ class User {
     }
 
     public function login($username, $password) {
-        $query = "SELECT * FROM " . $this->table . " WHERE username = :username OR email = :username";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute(['username' => $username]);
-        
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($user && password_verify($password, $user['password'])) {
-            return $user;
+        try {
+            $query = "SELECT id, username, email, password, fullname 
+                     FROM " . $this->table . " 
+                     WHERE username = :username";
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':username', $username);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                if (password_verify($password, $row['password'])) {
+                    // Không trả về password
+                    unset($row['password']);
+                    return $row;
+                }
+            }
+            
+            return false;
+        } catch (PDOException $e) {
+            error_log("Login error: " . $e->getMessage());
+            throw new Exception("Database error occurred");
         }
-        
-        return false;
     }
 
     public function createPasswordReset($email, $token, $expiry) {

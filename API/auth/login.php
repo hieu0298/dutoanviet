@@ -1,25 +1,32 @@
 <?php
 header('Content-Type: application/json');
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+
 require_once '../config/config.php';
 require_once '../config/database.php';
 require_once '../models/User.php';
 require_once '../utils/Response.php';
 
-session_start();
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    Response::error('Method not allowed', 405);
-    exit;
-}
-
-$data = json_decode(file_get_contents("php://input"), true);
-
-if (!isset($data['username']) || !isset($data['password'])) {
-    Response::error('Username and password are required');
-    exit;
-}
-
 try {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        throw new Exception('Method not allowed', 405);
+    }
+
+    $input = file_get_contents("php://input");
+    if (empty($input)) {
+        throw new Exception('No data provided');
+    }
+
+    $data = json_decode($input, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception('Invalid JSON data');
+    }
+
+    if (empty($data['username']) || empty($data['password'])) {
+        throw new Exception('Username and password are required');
+    }
+
     $database = new Database();
     $db = $database->connect();
     $user = new User($db);
@@ -27,23 +34,29 @@ try {
     $result = $user->login($data['username'], $data['password']);
 
     if ($result) {
-        // Lưu thông tin user vào session
+        session_start();
         $_SESSION['user_id'] = $result['id'];
         $_SESSION['username'] = $result['username'];
         $_SESSION['email'] = $result['email'];
         $_SESSION['fullname'] = $result['fullname'];
         
-        Response::success([
-            'user' => [
-                'id' => $result['id'],
-                'username' => $result['username'],
-                'email' => $result['email'],
-                'fullname' => $result['fullname']
+        echo json_encode([
+            'success' => true,
+            'message' => 'Login successful',
+            'data' => [
+                'user' => $result
             ]
-        ], 'Login successful');
+        ]);
     } else {
-        Response::error('Invalid credentials');
+        echo json_encode([
+            'success' => false,
+            'message' => 'Invalid credentials'
+        ]);
     }
 } catch (Exception $e) {
-    Response::error('Login failed: ' . $e->getMessage());
+    http_response_code($e->getCode() ?: 400);
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage()
+    ]);
 } 
