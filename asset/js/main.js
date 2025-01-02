@@ -1,4 +1,3 @@
-
 const API_URL = 'https://dutoanviet.com/API';
 async function registerUser(userData) {
     try {
@@ -23,7 +22,8 @@ async function loginUser(credentials) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(credentials)
+            body: JSON.stringify(credentials),
+            credentials: 'include'
         });
         return await response.json();
     } catch (error) {
@@ -72,26 +72,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (username && password) {
                 try {
-                    const credentials = {
+                    const response = await loginUser({
                         username: username,
                         password: password
-                    };
-                    
-                    const response = await loginUser(credentials);
+                    });
                     
                     if (response.success) {
-                        // Lưu token và thông tin user vào localStorage
-                        localStorage.setItem('token', response.token);
-                        localStorage.setItem('user', JSON.stringify(response.user));
+                        // Lưu thông tin user vào localStorage (không cần token)
+                        localStorage.setItem('user', JSON.stringify(response.data.user));
                         
                         // Chuyển hướng đến trang dashboard
                         window.location.href = './Page/dashboard.html';
                     } else {
-                        // Hiển thị thông báo lỗi từ server
                         if (errorMessage) {
                             errorMessage.style.display = 'block';
                             errorMessage.style.color = 'red';
-                            errorMessage.textContent = response.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
+                            errorMessage.textContent = response.message;
                         }
                     }
                 } catch (error) {
@@ -101,12 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         errorMessage.style.color = 'red';
                         errorMessage.textContent = 'Có lỗi xảy ra. Vui lòng thử lại sau.';
                     }
-                }
-            } else {
-                if (errorMessage) {
-                    errorMessage.style.display = 'block';
-                    errorMessage.style.color = 'red';
-                    errorMessage.textContent = 'Vui lòng nhập đầy đủ thông tin đăng nhập!';
                 }
             }
         });
