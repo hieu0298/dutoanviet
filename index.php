@@ -3,31 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dự Toán Việt - Phần Mềm Dự Toán Xây Dựng</title>
+    <title>Đăng nhập - Dự Toán Việt</title>
     <link rel="stylesheet" href="/asset/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-    <div class="welcome-container">
-        <div class="logo-placeholder">DỰ TOÁN VIỆT</div>
-        <h1>Phần Mềm Dự Toán Xây Dựng</h1>
-        <p class="subtitle">Đăng nhập để sử dụng phần mềm</p>
-        
-        <form id="login-form">
+    <div class="login-container">
+        <div class="logo-section">
+            <div class="logo">DỰ TOÁN VIỆT</div>
+            <h1>Đăng nhập hệ thống</h1>
+        </div>
+
+        <form id="login-form" class="login-form">
             <div class="form-group">
-                <input type="text" id="username" name="username" placeholder="Email/Tên đăng nhập" required>
-                <span class="error-text" id="username-error"></span>
+                <label for="username">Tài khoản</label>
+                <input type="text" id="username" name="username" required>
+                <span class="error-message" id="username-error"></span>
             </div>
 
             <div class="form-group">
-                <div class="password-input-container">
-                    <input type="password" id="password" name="password" placeholder="Mật khẩu" required>
+                <label for="password">Mật khẩu</label>
+                <div class="password-input">
+                    <input type="password" id="password" name="password" required>
                     <button type="button" class="toggle-password">
                         <i class="fas fa-eye"></i>
                     </button>
                 </div>
-                <span class="error-text" id="password-error"></span>
+                <span class="error-message" id="password-error"></span>
             </div>
 
             <div class="form-options">
@@ -35,20 +37,20 @@
                     <input type="checkbox" name="remember" id="remember">
                     <span>Ghi nhớ đăng nhập</span>
                 </label>
+                <a href="/forgot-password.php" class="forgot-link">Quên mật khẩu?</a>
             </div>
 
             <button type="submit" class="login-button">Đăng nhập</button>
         </form>
 
-        <div class="additional-options">
-            <a href="/forgot-password.php" class="forgot-password">Quên mật khẩu?</a>
-            <span class="separator">|</span>
-            <a href="/register.php" class="register-link">Đăng ký tài khoản mới</a>
+        <div class="register-section">
+            <p>Chưa có tài khoản? <a href="/register.php">Đăng ký ngay</a></p>
         </div>
 
-        <p id="error-message" class="error-message" style="display: none;"></p>
+        <div id="error-container" class="error-container"></div>
     </div>
 
+    <script src="/asset/js/form-validation.js"></script>
     <script src="/asset/js/main.js"></script>
 </body>
 </html> 

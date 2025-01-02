@@ -26,5 +26,7 @@
     </div>
 
     <script src="/asset/js/forgot-password.js"></script>
+    <script src="/asset/js/form-validation.js"></script>
+    <script src="/asset/js/main.js"></script>
 </body>
 </html> 
