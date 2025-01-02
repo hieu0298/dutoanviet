@@ -5,6 +5,17 @@ DirectoryIndex index.php
     Deny from all
 </FilesMatch>
 
+# Thêm header cho JSON
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "POST, GET, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+# Đảm bảo PHP errors không hiển thị
+php_flag display_errors off
+php_value error_reporting 0
+
 # Enable rewrite engine
 RewriteEngine On
 

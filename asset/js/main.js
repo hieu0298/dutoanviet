@@ -28,10 +28,21 @@ async function loginUser(credentials) {
             body: JSON.stringify(credentials),
             credentials: 'include'
         });
-        return await response.json();
+
+        // Kiểm tra response type
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Server response was not JSON');
+        }
+
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.error('Login error:', error);
-        throw error;
+        throw {
+            success: false,
+            message: 'Có lỗi xảy ra khi kết nối với server'
+        };
     }
 }
 
@@ -72,34 +83,36 @@ document.addEventListener('DOMContentLoaded', function() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('error-message');
+            const submitButton = this.querySelector('button[type="submit"]');
 
             if (username && password) {
                 try {
+                    submitButton.classList.add('button-loading');
+                    
                     const response = await loginUser({
                         username: username,
                         password: password
                     });
                     
                     if (response.success) {
-                        // Lưu thông tin user vào localStorage (không cần token)
+                        // Lưu thông tin user vào localStorage
                         localStorage.setItem('user', JSON.stringify(response.data.user));
                         
                         // Chuyển hướng đến trang dashboard
-                        window.location.href = '/Page/dashboard.html';
+                        window.location.href = '/Page/dashboard.php';
                     } else {
                         if (errorMessage) {
                             errorMessage.style.display = 'block';
-                            errorMessage.style.color = 'red';
                             errorMessage.textContent = response.message;
                         }
                     }
                 } catch (error) {
-                    console.error('Login error:', error);
                     if (errorMessage) {
                         errorMessage.style.display = 'block';
-                        errorMessage.style.color = 'red';
-                        errorMessage.textContent = 'Có lỗi xảy ra. Vui lòng thử lại sau.';
+                        errorMessage.textContent = error.message || 'Có lỗi xảy ra. Vui lòng thử lại sau.';
                     }
+                } finally {
+                    submitButton.classList.remove('button-loading');
                 }
             }
         });

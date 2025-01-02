@@ -1,4 +1,8 @@
 <?php
+// Tắt error reporting cho production
+error_reporting(0);
+ini_set('display_errors', 0);
+
 // Base URL configuration
 define('BASE_URL', 'https://dutoanviet.com');
 define('API_PATH', '/API');
